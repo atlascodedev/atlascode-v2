@@ -68,7 +68,7 @@ function ContactForm(props) {
         onSubmit={(values, actions) => {
           console.log(values.email, values.message, values.phone, values.name);
           axiosAtlas
-            .post("/sendMail", {
+            .post("/sendMail/atlascode", {
               name: values.name,
               email: values.email,
               message: values.message,

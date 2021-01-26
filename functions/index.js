@@ -72,7 +72,7 @@ app.post("/sendMail/coletivoprocidadania", cors(), (req, res, next) => {
   );
 });
 
-app.post("/sendMail/coletivoprocidadania", cors(), (req, res, next) => {
+app.post("/sendMail/atlascode", cors(), (req, res, next) => {
   sendMail(
     "Atlascode",
     "atendimento@atlascode.dev",
