@@ -1,7 +1,9 @@
 const functions = require("firebase-functions");
 const nodemailer = require("nodemailer");
 const express = require("express");
-const cors = require("cors");
+const cors = require("cors")({
+  origin: true,
+});
 const app = express();
 
 let transporter = nodemailer.createTransport({
@@ -20,7 +22,31 @@ let coletivoTransporter = nodemailer.createTransport({
   },
 });
 
-app.options("*", cors());
+let gnosisTransporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: functions.config().client_api.gnosis.gmail_username,
+    pass: functions.config().client_api.gnosis.gmail_app_pass,
+  },
+});
+
+let hightechserralheriaTransporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: functions.config().client_api.hightechserralheria.gmail_username,
+    pass: functions.config().client_api.hightechserralheria.gmail_app_pass,
+  },
+});
+
+let proCidadaniaTransporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: functions.config().client_api.procidadania.gmail_username,
+    pass: functions.config().client_api.procidadania.gmail_app_pass,
+  },
+});
+
+app.use(cors);
 
 const sendMail = (
   fromName,
@@ -60,23 +86,27 @@ const sendMail = (
   });
 };
 
-app.post("/sendMail/coletivoprocidadania", cors(), (req, res, next) => {
+app.post("/sendMail/coletivoprocidadania", (req, res, next) => {
   sendMail(
-    "Coletivo Pro Cidadania",
-    "sistema@coletivoprocidadania.org",
-    "coletivocmslogin@gmail.com",
+    "Pro Cidadania",
+    "sistema.procidadania@gmail",
+    "sistema.procidadania@gmail",
     "Contato efetuado pelo seu website",
-    coletivoTransporter,
+    proCidadaniaTransporter,
     req,
     res
   );
 });
 
-app.post("/sendMail/atlascode", cors(), (req, res, next) => {
+app.post("/sendMail/atlascode", (req, res, next) => {
   sendMail(
     "Atlascode",
     "atendimento@atlascode.dev",
-    "alex.xande10@gmail.com",
+    [
+      "alex.xande10@gmail.com",
+      "atendimento@atlascode.dev",
+      "aleksander@atlascode.dev",
+    ],
     "Contato efetuado pelo seu website",
     transporter,
     req,
@@ -84,4 +114,39 @@ app.post("/sendMail/atlascode", cors(), (req, res, next) => {
   );
 });
 
+app.post("/sendMail/gnosis", (req, res, next) => {
+  sendMail(
+    "Sistema - Instituto Educacional Gnosis",
+    "sistema@institutoeg.com",
+    "gnosis.sistema@gmail.com",
+    "Contato efetuado através do formulário de seu website",
+    gnosisTransporter,
+    req,
+    res
+  );
+});
+
+app.post("/sendMail/gnosis-curso", (req, res, next) => {
+  sendMail(
+    "Sistema - Instituto Educacional Gnosis",
+    "sistema@institutoeg.com",
+    ["gnosis.sistema@gmail.com", "atendimento@institutoeg.com"],
+    `Manifestação de interesse - ${req.body.course} `,
+    gnosisTransporter,
+    req,
+    res
+  );
+});
+
+app.post("/sendMail/hightechserralheria", (req, res, next) => {
+  sendMail(
+    "Sistema - HighTech Serralheria",
+    "sistema@hightechfloripa.com",
+    "sistema.hightechserralheria@gmail.com",
+    "Contato efetuado através de seu website",
+    hightechserralheriaTransporter,
+    req,
+    res
+  );
+});
 exports.api = functions.https.onRequest(app);

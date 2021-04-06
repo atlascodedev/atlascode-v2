@@ -11,6 +11,7 @@ import ScrollTopComponent, {
   ScrollTop,
 } from "../../UtilityComponents/ScrollBackTop";
 import { Link } from "react-router-dom";
+import AtlasLogo from "../../../svg/atlas-logo-main.svg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,7 +90,7 @@ export default function AtlasAppBar({ menu, ...props }) {
                     <Link to="/">
                       <img
                         className={classes.atlasLogoClass}
-                        src={null}
+                        src={AtlasLogo}
                         alt=""
                       />
                     </Link>
