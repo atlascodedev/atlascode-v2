@@ -89,8 +89,8 @@ const sendMail = (
 app.post("/sendMail/coletivoprocidadania", (req, res, next) => {
   sendMail(
     "Pro Cidadania",
-    "sistema.procidadania@gmail",
-    "sistema.procidadania@gmail",
+    "contato@pro-cidadania.org",
+    "sistema.procidadania@gmail.com",
     "Contato efetuado pelo seu website",
     proCidadaniaTransporter,
     req,
