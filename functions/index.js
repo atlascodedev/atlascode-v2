@@ -46,6 +46,37 @@ let proCidadaniaTransporter = nodemailer.createTransport({
   },
 });
 
+let portalBensTransporter = nodemailer.createTransport({
+  service: "gmail",
+
+  auth: {
+    user: functions.config().client_api.portalbens.gmail_username,
+    pass: functions.config().client_api.portalbens.gmail_app_pass,
+  },
+});
+
+let portalBensTransporterSMTP = nodemailer.createTransport({
+  pool: true,
+  host: functions.config().mail_server.host,
+  port: 465,
+  secure: true,
+  auth: {
+    user: functions.config().mail_server.auth.user,
+    pass: functions.config().mail_server.auth.pass,
+  },
+});
+
+const atlasCodeSMTPServerTransporter = nodemailer.createTransport({
+  pool: true,
+  host: functions.config().mail_server.host,
+  port: 465,
+  secure: true,
+  auth: {
+    user: functions.config().mail_server.auth.user,
+    pass: functions.config().mail_server.auth.pass,
+  },
+});
+
 app.use(cors);
 
 const sendMail = (
@@ -89,10 +120,10 @@ const sendMail = (
 app.post("/sendMail/coletivoprocidadania", (req, res, next) => {
   sendMail(
     "Pro Cidadania",
-    "contato@pro-cidadania.org",
+    "sistema@atlascode.dev",
     ["sistema.procidadania@gmail.com", "contato@pro-cidadania.org"],
     "Contato efetuado pelo seu website",
-    proCidadaniaTransporter,
+    atlasCodeSMTPServerTransporter,
     req,
     res
   );
@@ -101,14 +132,26 @@ app.post("/sendMail/coletivoprocidadania", (req, res, next) => {
 app.post("/sendMail/atlascode", (req, res, next) => {
   sendMail(
     "Atlascode",
-    "atendimento@atlascode.dev",
+    "sistema@atlascode.dev",
     [
       "alex.xande10@gmail.com",
       "atendimento@atlascode.dev",
       "aleksander@atlascode.dev",
     ],
     "Contato efetuado pelo seu website",
-    transporter,
+    atlasCodeSMTPServerTransporter,
+    req,
+    res
+  );
+});
+
+app.post("/sendMail/portalbens", (req, res, next) => {
+  sendMail(
+    "Portal Bens",
+    "sistema@atlascode.dev",
+    "sistema.portalbens@gmail.com",
+    "Contato efetuado pelo seu website",
+    atlasCodeSMTPServerTransporter,
     req,
     res
   );
@@ -117,10 +160,10 @@ app.post("/sendMail/atlascode", (req, res, next) => {
 app.post("/sendMail/gnosis", (req, res, next) => {
   sendMail(
     "Sistema - Instituto Educacional Gnosis",
-    "sistema@institutoeg.com",
+    "sistema@atlascode.dev",
     "gnosis.sistema@gmail.com",
     "Contato efetuado através do formulário de seu website",
-    gnosisTransporter,
+    atlasCodeSMTPServerTransporter,
     req,
     res
   );
@@ -129,10 +172,10 @@ app.post("/sendMail/gnosis", (req, res, next) => {
 app.post("/sendMail/gnosis-curso", (req, res, next) => {
   sendMail(
     "Sistema - Instituto Educacional Gnosis",
-    "sistema@institutoeg.com",
+    "sistema@atlascode.dev",
     ["gnosis.sistema@gmail.com", "atendimento@institutoeg.com"],
     `Manifestação de interesse - ${req.body.course} `,
-    gnosisTransporter,
+    atlasCodeSMTPServerTransporter,
     req,
     res
   );
@@ -141,10 +184,10 @@ app.post("/sendMail/gnosis-curso", (req, res, next) => {
 app.post("/sendMail/hightechserralheria", (req, res, next) => {
   sendMail(
     "Sistema - HighTech Serralheria",
-    "sistema@hightechfloripa.com",
+    "sistema@atlascode.dev",
     "sistema.hightechserralheria@gmail.com",
     "Contato efetuado através de seu website",
-    hightechserralheriaTransporter,
+    atlasCodeSMTPServerTransporter,
     req,
     res
   );
