@@ -6,66 +6,6 @@ const cors = require("cors")({
 });
 const app = express();
 
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: functions.config().client_api.atlascode.gmail_username,
-    pass: functions.config().client_api.atlascode.gmail_app_pass,
-  },
-});
-
-let coletivoTransporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: functions.config().client_api.coletivoprocidadania.gmail_username,
-    pass: functions.config().client_api.coletivoprocidadania.gmail_app_pass,
-  },
-});
-
-let gnosisTransporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: functions.config().client_api.gnosis.gmail_username,
-    pass: functions.config().client_api.gnosis.gmail_app_pass,
-  },
-});
-
-let hightechserralheriaTransporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: functions.config().client_api.hightechserralheria.gmail_username,
-    pass: functions.config().client_api.hightechserralheria.gmail_app_pass,
-  },
-});
-
-let proCidadaniaTransporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: functions.config().client_api.procidadania.gmail_username,
-    pass: functions.config().client_api.procidadania.gmail_app_pass,
-  },
-});
-
-let portalBensTransporter = nodemailer.createTransport({
-  service: "gmail",
-
-  auth: {
-    user: functions.config().client_api.portalbens.gmail_username,
-    pass: functions.config().client_api.portalbens.gmail_app_pass,
-  },
-});
-
-let portalBensTransporterSMTP = nodemailer.createTransport({
-  pool: true,
-  host: functions.config().mail_server.host,
-  port: 465,
-  secure: true,
-  auth: {
-    user: functions.config().mail_server.auth.user,
-    pass: functions.config().mail_server.auth.pass,
-  },
-});
-
 const atlasCodeSMTPServerTransporter = nodemailer.createTransport({
   pool: true,
   host: functions.config().mail_server.host,
@@ -187,6 +127,22 @@ app.post("/sendMail/hightechserralheria", (req, res, next) => {
     "sistema@atlascode.dev",
     "sistema.hightechserralheria@gmail.com",
     "Contato efetuado através de seu website",
+    atlasCodeSMTPServerTransporter,
+    req,
+    res
+  );
+});
+
+app.post("/sendMail/consultoriaespecializa", (req, res, next) => {
+  sendMail(
+    "Sistema - Consultoria Especializa",
+    "sistema@atlascode.dev",
+    [
+      "diretoria@consultoriaespecializa.com",
+      "atendimento@consultoriaespecializa.com",
+      "suporte@consultoriaespecializa.com",
+    ],
+    "Contato efetuado através do seu website",
     atlasCodeSMTPServerTransporter,
     req,
     res
