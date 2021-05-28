@@ -148,4 +148,17 @@ app.post("/sendMail/consultoriaespecializa", (req, res, next) => {
     res
   );
 });
+
+app.post("/sendMail/mapacultural", (req, res, next) => {
+  sendMail(
+    "Sistema - Mapeamento Cultural de Taquara",
+    "sistema@atlascode.dev",
+    ["alex.xande10@gmail.com"],
+    "Contato efeatuado através do website",
+    atlasCodeSMTPServerTransporter,
+    req,
+    res
+  );
+});
+
 exports.api = functions.https.onRequest(app);
